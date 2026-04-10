@@ -12,6 +12,28 @@ The user will review those variants in-browser with Varium and choose a directio
 Generate exactly 3 variants unless the user explicitly asks for a different count.
 Three gives meaningful range without turning the picker into a burden.
 
+## Design thinking before coding
+Before writing variants, identify the shared intention of the section first.
+All variants should solve the same product problem, but they should do it through clearly different design approaches.
+
+For each variant, choose a distinct point of view across:
+- layout and spatial structure
+- typographic hierarchy and font personality
+- visual tone and emotional character
+- density, rhythm, and information flow
+- degree of boldness or restraint
+
+Think in terms of different strategies, not different skins.
+Good contrast:
+- one variant could be editorial and spacious
+- one could be structured and product-like
+- one could be bold, dramatic, or unexpected
+
+Bad contrast:
+- same layout with different colors
+- same card grid with minor spacing changes
+- same typography with only background treatment swapped
+
 ## Variant naming
 Name variants after their visual or emotional character, not their order or raw layout mechanics.
 
@@ -26,12 +48,23 @@ Bad names:
 - Three Column Layout
 
 ## Design quality rules
-- Every variant must have a distinct point of view. Do not ship near-duplicates with palette swaps.
+- Every variant must have a distinct point of view. They should feel like different approaches to the same intention, not siblings from the same template.
+- Do not ship near-duplicates with palette swaps, spacing nudges, or the same layout repeated with cosmetic tweaks.
 - Change typography, spacing rhythm, composition, and tone between variants.
+- Vary the overall concept aggressively enough that a user can make a real directional choice.
 - At least one variant should take a creative risk while remaining production-ready.
 - Keep contrast accessible and layouts responsive.
 - Avoid generic AI aesthetics. Pick an intentional visual direction and follow through.
 - Variants should feel ready to keep, not like sketches.
+- Use the spirit of a strong frontend design skill: commit to a clear aesthetic direction, execute it precisely, and avoid bland middle-of-the-road design.
+- Choose fonts, hierarchy, spacing, and backgrounds intentionally. Do not default to generic UI patterns, default font stacks, or interchangeable component compositions.
+
+## Diversity check
+Before finalizing the variants, verify:
+- each variant would still be identifiable if shown in grayscale
+- each variant has a different dominant visual idea
+- at least one variant changes the composition, not just the styling
+- the set feels curated, not automatically permuted
 
 ## File naming convention
 - Create the variants file beside the target component using `ComponentName.variants.tsx`.
