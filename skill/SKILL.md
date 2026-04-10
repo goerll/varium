@@ -55,12 +55,37 @@ Bad names:
 - Use the spirit of a strong frontend design skill: commit to a clear aesthetic direction, execute it precisely, and avoid bland middle-of-the-road design.
 - Choose fonts, hierarchy, spacing, and backgrounds intentionally. Do not default to generic UI patterns, default font stacks, or interchangeable component compositions.
 
+## Visual restraint
+- Default to clean, restrained design. Do not add gradients, glow effects, glassmorphism, noise textures, floating pills, or decorative ornaments unless the user asked for them or the existing page already uses them in a way that the new section should match.
+- Treat gradients as an exception, not a default. If the surrounding page is flat, neutral, or minimally styled, your variants should respect that.
+- Decorative badges, status pills, and tiny labels must earn their place. If a label like `Active`, `New`, or `Architecture` does not add real meaning, remove it.
+- Do not use visual treatment to compensate for weak hierarchy or weak content.
+
+## Content discipline
+- Design the component around the actual message, not around placeholder UI patterns.
+- Avoid repeating the same idea in the eyebrow, heading, subheading, cards, footer notes, and badges. If two lines say nearly the same thing, consolidate them.
+- Every piece of copy should have a job. The eyebrow sets context.
+- Every piece of copy should have a job. The heading makes the main point.
+- Every piece of copy should have a job. Supporting text adds only necessary clarification.
+- Every piece of copy should have a job. Labels inside the component should add specific meaning.
+- Do not overwhelm the viewer with redundant descriptors, repeated section summaries, or ornamental microcopy.
+- Prefer fewer, sharper content elements over a busier layout full of weak copy.
+
+## Composition principles
+- The content and hierarchy should feel resolved before decoration is added.
+- Build components that look inevitable and well-edited, not like a layout scaffold that had content poured into it afterward.
+- Prefer one strong organizing idea per variant.
+- Avoid stacking too many containers, callouts, captions, legends, pills, and helper texts unless the information truly requires them.
+- If a component already has strong structure, simplify the chrome around it rather than adding more.
+
 ## Diversity check
 Before finalizing the variants, verify:
 - each variant would still be identifiable if shown in grayscale
 - each variant has a different dominant visual idea
 - at least one variant changes the composition, not just the styling
 - the set feels curated, not automatically permuted
+- each variant feels edited, with unnecessary copy and decoration removed
+- the surrounding page and the new section feel like they belong to the same product
 
 ## File naming convention
 - Create the variants file beside the target component using `ComponentName.variants.tsx`.
@@ -113,6 +138,30 @@ export default function Page() {
   );
 }
 ```
+
+## Validation before handoff
+Before asking the user to review variants, run the lightest available validation that can catch problems introduced by your changes and fix any issues you created.
+
+Validation priority:
+1. Check the generated `.variants.tsx` file and the edited host file for obvious lint issues.
+2. If the repository has a fast lint or typecheck command, run it.
+3. If the repository has a fast build or preview validation path, use it when practical.
+
+Requirements:
+- Remove unused imports, dead helpers, and stale utility imports.
+- Do not leave generated files in a state that breaks the local preview.
+- Respect the repository's TypeScript and lint configuration.
+- If your changes trigger warnings or errors, fix them before handing the page to the user whenever the fix is local and safe.
+
+## `.variants.tsx` compatibility
+Some repositories enable `react-refresh/only-export-components`, which can warn when a `.variants.tsx` file exports a named object like `variants`.
+
+If that rule is active in the repository:
+- prefer a narrow file-level disable for that rule in the generated `.variants.tsx` file rather than leaving the warning behind
+- keep the disable scoped to the generated file only
+- do not add broad lint disables elsewhere in the codebase
+
+Also watch for repository-specific rules around unused imports, hooks, or export shapes and make the generated file comply.
 
 ## Selection protocol
 After wiring the picker into the page, prefer a native agent selection flow over manual copy/paste whenever the environment supports it.
