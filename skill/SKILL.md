@@ -5,8 +5,8 @@ You are generating multiple high-quality UI design variants for a React componen
 The user will review those variants in-browser with Varium and choose a direction to keep.
 
 ## How many variants
-Generate exactly 3 variants unless the user explicitly asks for a different count.
-Three gives meaningful range without turning the picker into a burden.
+Generate at least 4 variants unless the user explicitly asks for a different count.
+Four gives enough range for meaningful structural exploration without turning the review into noise.
 
 ## Design thinking before coding
 Before writing variants, identify the shared intention of the section first.
@@ -30,6 +30,21 @@ Bad contrast:
 - same card grid with minor spacing changes
 - same typography with only background treatment swapped
 
+## Page fit first
+Before inventing a direction, inspect the surrounding page and extract its actual visual system:
+- accent color usage
+- shadow strength or lack of shadows
+- border weight and corner radius
+- density and whitespace
+- whether the page is flat, textured, quiet, expressive, editorial, or product-like
+- how the page handles proof, media, and emphasis
+
+Your variants should live inside that system unless the user explicitly wants a stronger departure.
+Do not introduce a new accent color, gradient family, shadow language, badge style, or decorative motif just because it looks attractive in isolation.
+If the page is quiet and flat, keep the section quiet and flat.
+If the page uses minimal shadows and neutral surfaces, do not suddenly introduce glowing cards, bright yellows, or heavy elevated panels.
+If the page proves its point through restrained typography and spacing, do not switch to flashy UI with loud ratings, floating controls, oversized badges, or extra marketing chrome.
+
 ## Variant naming
 Name variants after their visual or emotional character, not their order or raw layout mechanics.
 
@@ -48,6 +63,7 @@ Bad names:
 - Do not ship near-duplicates with palette swaps, spacing nudges, or the same layout repeated with cosmetic tweaks.
 - Change typography, spacing rhythm, composition, and tone between variants.
 - Vary the overall concept aggressively enough that a user can make a real directional choice.
+- Explore different presentation models for the same content. The difference should often come from structure first, not color first.
 - At least one variant should take a creative risk while remaining production-ready.
 - Keep contrast accessible and layouts responsive.
 - Avoid generic AI aesthetics. Pick an intentional visual direction and follow through.
@@ -59,6 +75,7 @@ Bad names:
 - Default to clean, restrained design. Do not add gradients, glow effects, glassmorphism, noise textures, floating pills, or decorative ornaments unless the user asked for them or the existing page already uses them in a way that the new section should match.
 - Treat gradients as an exception, not a default. If the surrounding page is flat, neutral, or minimally styled, your variants should respect that.
 - Decorative badges, status pills, and tiny labels must earn their place. If a label like `Active`, `New`, or `Architecture` does not add real meaning, remove it.
+- Strong shadows are also an exception. If the page does not already rely on obvious elevation, avoid introducing pronounced card shadows or artificial depth.
 - Do not use visual treatment to compensate for weak hierarchy or weak content.
 
 ## Content discipline
@@ -78,6 +95,19 @@ Bad names:
 - Avoid stacking too many containers, callouts, captions, legends, pills, and helper texts unless the information truly requires them.
 - If a component already has strong structure, simplify the chrome around it rather than adding more.
 
+## Structural diversity between variants
+- The variants must differ in component architecture, not just styling.
+- At least two variants should change the layout pattern itself: for example a stacked content band, a split media-and-content layout, a single focal panel, a comparison row, an editorial narrative block, a proof grid, or a step-based structure.
+- Do not generate multiple versions of the same repeated-card layout with different borders, shadows, or accent colors.
+- Change how the eye moves through the section, how content is grouped, and what element carries the visual weight.
+- A good set of variants should make the user compare different ideas for presenting the message, not different skins for the same wireframe.
+- Use the same content to test different compositional bets. For example:
+  - one variant can center a single focal statement or artifact
+  - one can pair content with media, product context, or supporting data
+  - one can organize multiple items into a quieter system of proof or comparison
+- When the section naturally contains repeated items, avoid defaulting to a row of matching cards unless that is genuinely the strongest direction for the page.
+- Do not treat layout diversity as decoration. The structure should change what feels primary, what feels supporting, and how the viewer scans the section.
+
 ## Diversity check
 Before finalizing the variants, verify:
 - each variant would still be identifiable if shown in grayscale
@@ -86,6 +116,7 @@ Before finalizing the variants, verify:
 - the set feels curated, not automatically permuted
 - each variant feels edited, with unnecessary copy and decoration removed
 - the surrounding page and the new section feel like they belong to the same product
+- the variants differ in layout pattern, not just color and outline treatment
 
 ## File naming convention
 - Create the variants file beside the target component using `ComponentName.variants.tsx`.
@@ -115,13 +146,13 @@ Requirements:
 - Import `VariantPicker` from `@varium/core`
 - Import the `variants` object from the generated `.variants.tsx` file
 - Wrap the picker block with `VARIUM:START` and `VARIUM:END` comments
-- Use a descriptive `slot` value such as `testimonials`, `pricing`, or `hero`
+- Use a descriptive `slot` value such as `proof`, `pricing`, `hero`, or `feature-comparison`
 
 Example:
 
 ```tsx
 import { VariantPicker } from "@varium/core";
-import { variants } from "@/components/Testimonials.variants";
+import { variants } from "@/components/SectionReview.variants";
 
 export default function Page() {
   return (
@@ -129,8 +160,8 @@ export default function Page() {
       <Hero />
       <Logos />
 
-      {/* VARIUM:START slot="testimonials" */}
-      <VariantPicker variants={variants} slot="testimonials" />
+      {/* VARIUM:START slot="proof" */}
+      <VariantPicker variants={variants} slot="proof" />
       {/* VARIUM:END */}
 
       <Footer />
@@ -178,7 +209,7 @@ Prompt Claude Code to use its `AskUserQuestion` tool with the variant names as e
 Example instruction:
 
 ```txt
-Use your AskUserQuestion tool and ask the user to choose a variant for testimonials. Options: Signal Stack, Amber Editorial, Orbit Panels.
+Use your AskUserQuestion tool and ask the user to choose a variant for this section. Options: Editorial Band, Quiet Comparison, Split Context, Focal Statement.
 ```
 
 Treat the selected option as the committed variant.
@@ -189,10 +220,11 @@ List the available variants in chat using a numbered list and tell the user they
 Example:
 
 ```txt
-Choose a variant for testimonials:
-1. Signal Stack
-2. Amber Editorial
-3. Orbit Panels
+Choose a variant for this section:
+1. Editorial Band
+2. Quiet Comparison
+3. Split Context
+4. Focal Statement
 
 Reply with the number or the variant name.
 ```
@@ -206,7 +238,7 @@ If the repo has been initialized with Varium command files, `/varium ...` should
 If the environment cannot present choices directly, you may ask the user to reply with a message like:
 
 ```txt
-varium: commit [slot=testimonials] [variant=Editorial Grid]
+varium: commit [slot=proof] [variant=Quiet Comparison]
 ```
 
 Treat that message as the source of truth for the chosen variant.
