@@ -14,7 +14,7 @@
   "homepage": "https://github.com/goerll/varium#readme",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "pnpm --filter @varium/react dev",
+    "dev": "pnpm --filter varium dev",
     "demo": "pnpm --filter @varium/example-vite-react dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint"

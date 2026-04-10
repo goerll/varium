@@ -1,10 +1,10 @@
 # Varium
 
-Varium is an open-source React toolkit for agent-driven UI exploration. An agent generates multiple production-ready component variants beside the target component, Varium renders those options inside the real page with a polished in-browser picker, and the agent then asks the user to choose a winner through a native question flow when available or a numbered list in chat.
+Varium is an open-source toolkit for agent-driven UI exploration in React apps. An agent generates multiple production-ready component variants beside the target component, Varium renders those options inside the real page with an in-browser picker, and the agent then asks the user to choose a winner through a native question flow when available or a numbered list in chat.
 
 ## What it includes
 
-- `packages/react`: the `VariantPicker` component and shared types
+- `packages/varium`: the runtime package, CLI, and bundled templates
 - `skill/SKILL.md`: the agent-facing protocol for generating and committing variants
 - `skill/examples/vite-react`: the primary working demo
 - `skill/examples/next-app`: reserved for the roadmap Next.js example
@@ -12,8 +12,11 @@ Varium is an open-source React toolkit for agent-driven UI exploration. An agent
 ## Install
 
 ```bash
-pnpm add -D @varium/react
+pnpm add -D varium
+npx varium init
 ```
+
+`varium init` detects the framework, asks which agents should be configured, always installs the shared skill into `.agents/skills/varium`, and adds `/varium` command wrappers for Claude Code and OpenCode when selected.
 
 ## Variant protocol
 
@@ -27,7 +30,7 @@ src/components/Testimonials.variants.tsx
 That file exports a named `variants` object:
 
 ```tsx
-import type { VariantMap } from "@varium/react";
+import type { VariantMap } from "varium";
 
 const DarkMinimal = () => <section>{/* ... */}</section>;
 const EditorialGrid = () => <section>{/* ... */}</section>;
@@ -43,7 +46,7 @@ export const variants: VariantMap = {
 The host page temporarily mounts the picker:
 
 ```tsx
-import { VariantPicker } from "@varium/react";
+import { VariantPicker } from "varium";
 import { variants } from "@/components/Testimonials.variants";
 
 export default function Page() {
@@ -77,8 +80,7 @@ Reply with the number or the variant name.
 The agent should then replace the picker with the chosen component and delete the `.variants.tsx` file.
 
 ## Skill setup
-
-Copy the contents of [`skill/SKILL.md`](/home/estevao/varium/skill/SKILL.md) into your agent skill system or project instructions. The skill defines:
+`npx varium init` installs the Varium skill into the right directories for the agents you choose. The generated skill defines:
 
 - generate exactly 3 variants by default
 - name variants by visual character, not sequence
@@ -86,6 +88,16 @@ Copy the contents of [`skill/SKILL.md`](/home/estevao/varium/skill/SKILL.md) int
 - insert the picker between `VARIUM:START` and `VARIUM:END`
 - ask for selection using native tools when available
 - accept a numbered reply or variant name as fallback
+
+If you need the raw source template, it lives at [`skill/SKILL.md`](/home/estevao/varium/skill/SKILL.md).
+
+## Commands
+
+After `varium init`:
+
+- Claude Code can use `/varium make a testimonial section`
+- OpenCode can use `/varium make a testimonial section`
+- Codex and other `.agents`-compatible runtimes can use `use varium to make a testimonial section`
 
 ## Demo
 

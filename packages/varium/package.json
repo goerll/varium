@@ -1,12 +1,12 @@
 {
-  "name": "@varium/react",
+  "name": "varium",
   "version": "0.1.0",
-  "description": "AI agent toolkit for React UI variant picking",
+  "description": "Agent-driven UI variant generation and in-browser review for React apps",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/goerll/varium.git",
-    "directory": "packages/react"
+    "directory": "packages/varium"
   },
   "bugs": {
     "url": "https://github.com/goerll/varium/issues"
@@ -16,12 +16,18 @@
     "react",
     "ai",
     "agent",
+    "claude-code",
+    "codex",
+    "opencode",
     "design-system",
     "ui",
     "variants"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "bin": {
+    "varium": "./bin/varium.js"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -34,12 +40,17 @@
     }
   },
   "files": [
-    "dist"
+    "bin",
+    "dist",
+    "templates"
   ],
   "scripts": {
     "dev": "tsup src/index.tsx --watch --format cjs,esm --dts",
     "build": "tsup src/index.tsx --format cjs,esm --dts --clean",
     "lint": "tsc --project tsconfig.json"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "peerDependencies": {
     "react": ">=18",

@@ -1,5 +1,9 @@
 # Varium Design Skill
 
+## Framework context
+This repository is using {{FRAMEWORK_NAME}}.
+Prefer the existing file structure, imports, styling approach, and component conventions you find in the codebase.
+
 ## What you are doing
 You are generating multiple high-quality UI design variants for a React component.
 The user will review those variants in-browser with Varium and choose a direction to keep.
@@ -51,7 +55,7 @@ export const variants: VariantMap = {
 ```
 
 ## Picker integration
-After generating variants, edit the host page and insert the Varium picker where the user is deciding.
+After generating variants, edit the host file and insert the Varium picker where the user is deciding.
 
 Requirements:
 - Import `VariantPicker` from `varium`
@@ -59,23 +63,19 @@ Requirements:
 - Wrap the picker block with `VARIUM:START` and `VARIUM:END` comments
 - Use a descriptive `slot` value such as `testimonials`, `pricing`, or `hero`
 
-Example:
+Framework-tailored example:
 
 ```tsx
+// {{HOST_FILE}}
 import { VariantPicker } from "varium";
-import { variants } from "@/components/Testimonials.variants";
+import { variants } from "{{VARIANTS_IMPORT}}";
 
 export default function Page() {
   return (
     <main>
-      <Hero />
-      <Logos />
-
       {/* VARIUM:START slot="testimonials" */}
       <VariantPicker variants={variants} slot="testimonials" />
       {/* VARIUM:END */}
-
-      <Footer />
     </main>
   );
 }
@@ -119,15 +119,6 @@ Normalize the user's response back to the exact variant name before proceeding.
 
 ### Slash command usage
 If the repo has been initialized with Varium command files, `/varium ...` should route into this workflow directly for Claude Code and OpenCode.
-
-### Manual fallback
-If the environment cannot present choices directly, you may ask the user to reply with a message like:
-
-```txt
-varium: commit [slot=testimonials] [variant=Editorial Grid]
-```
-
-Treat that message as the source of truth for the chosen variant.
 
 ## After user picks
 When the user identifies the variant they want through a selection tool, by replying with a number or name, or by giving you a valid Varium commit message:

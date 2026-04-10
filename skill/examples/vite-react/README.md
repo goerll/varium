@@ -15,7 +15,7 @@ pnpm --filter @varium/example-vite-react dev
 
 - `src/components/Testimonials.variants.tsx` contains three named UI directions.
 - [`src/App.tsx`](./src/App.tsx) mounts `VariantPicker` between `VARIUM:START` and `VARIUM:END`.
-- The bottom overlay copies a commit string like `varium: commit [slot=testimonials] [variant=Orbit Panels]`.
+- The agent should ask the user to choose one of the variant names after review.
 
 ## Example agent prompt
 
@@ -26,7 +26,12 @@ Use the Varium skill. Generate 3 testimonial variants for this landing page, wir
 ## Example follow-up after choosing
 
 ```txt
-varium: commit [slot=testimonials] [variant=Amber Editorial]
+Choose a variant for testimonials:
+1. Structured Proof
+2. Wallet Ribbon
+3. Case Study Band
+
+Reply with the number or the variant name.
 ```
 
 At that point the agent should replace the picker with the chosen testimonial component and remove the `.variants.tsx` file.

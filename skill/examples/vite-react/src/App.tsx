@@ -1,4 +1,4 @@
-import { VariantPicker } from "@varium/react";
+import { VariantPicker } from "varium";
 
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
