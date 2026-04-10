@@ -1,0 +1,57 @@
+{
+  "name": "@varium/react",
+  "version": "0.1.0",
+  "description": "AI agent toolkit for React UI variant picking",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goerll/varium.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/goerll/varium/issues"
+  },
+  "homepage": "https://github.com/goerll/varium#readme",
+  "keywords": [
+    "react",
+    "ai",
+    "agent",
+    "design-system",
+    "ui",
+    "variants"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsup src/index.tsx --watch --format cjs,esm --dts",
+    "build": "tsup src/index.tsx --format cjs,esm --dts --clean",
+    "lint": "tsc --project tsconfig.json"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@types/react": "^18.3.21",
+    "@types/react-dom": "^18.3.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}
