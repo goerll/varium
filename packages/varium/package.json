@@ -1,5 +1,5 @@
 {
-  "name": "varium",
+  "name": "@varium/core",
   "version": "0.1.0",
   "description": "Agent-driven UI variant generation and in-browser review for React apps",
   "license": "MIT",

@@ -34,15 +34,15 @@ importers:
 
   skill/examples/vite-react:
     dependencies:
+      '@varium/core':
+        specifier: workspace:*
+        version: link:../../../packages/varium
       react:
         specifier: ^18.3.1
         version: 18.3.1
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
-      varium:
-        specifier: workspace:*
-        version: link:../../../packages/varium
     devDependencies:
       '@tailwindcss/vite':
         specifier: ^4.1.4

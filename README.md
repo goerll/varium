@@ -12,11 +12,11 @@ Varium is an open-source toolkit for agent-driven UI exploration in React apps. 
 ## Install
 
 ```bash
-pnpm add -D varium
-npx varium init
+pnpm add -D @varium/core
+npx @varium/core init
 ```
 
-`varium init` detects the framework, asks which agents should be configured, always installs the shared skill into `.agents/skills/varium`, and adds `/varium` command wrappers for Claude Code and OpenCode when selected.
+`npx @varium/core init` detects the framework, asks which agents should be configured, always installs the shared skill into `.agents/skills/varium`, and adds `/varium` command wrappers for Claude Code and OpenCode when selected.
 
 ## Variant protocol
 
@@ -30,7 +30,7 @@ src/components/Testimonials.variants.tsx
 That file exports a named `variants` object:
 
 ```tsx
-import type { VariantMap } from "varium";
+import type { VariantMap } from "@varium/core";
 
 const DarkMinimal = () => <section>{/* ... */}</section>;
 const EditorialGrid = () => <section>{/* ... */}</section>;
@@ -46,7 +46,7 @@ export const variants: VariantMap = {
 The host page temporarily mounts the picker:
 
 ```tsx
-import { VariantPicker } from "varium";
+import { VariantPicker } from "@varium/core";
 import { variants } from "@/components/Testimonials.variants";
 
 export default function Page() {
@@ -80,7 +80,7 @@ Reply with the number or the variant name.
 The agent should then replace the picker with the chosen component and delete the `.variants.tsx` file.
 
 ## Skill setup
-`npx varium init` installs the Varium skill into the right directories for the agents you choose. The generated skill defines:
+`npx @varium/core init` installs the Varium skill into the right directories for the agents you choose. The generated skill defines:
 
 - generate exactly 3 variants by default
 - name variants by visual character, not sequence
@@ -93,7 +93,7 @@ If you need the raw source template, it lives at [`skill/SKILL.md`](/home/esteva
 
 ## Commands
 
-After `varium init`:
+After `npx @varium/core init`:
 
 - Claude Code can use `/varium make a testimonial section`
 - OpenCode can use `/varium make a testimonial section`

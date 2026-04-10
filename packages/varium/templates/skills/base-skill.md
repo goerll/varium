@@ -35,13 +35,13 @@ Bad names:
 
 ## File naming convention
 - Create the variants file beside the target component using `ComponentName.variants.tsx`.
-- Export a named `variants` object typed as `VariantMap` from `varium`.
+- Export a named `variants` object typed as `VariantMap` from `@varium/core`.
 - Each entry in `variants` must be a zero-argument React component.
 
 Example:
 
 ```tsx
-import type { VariantMap } from "varium";
+import type { VariantMap } from "@varium/core";
 
 const DarkMinimal = () => <section>{/* ... */}</section>;
 const EditorialGrid = () => <section>{/* ... */}</section>;
@@ -58,7 +58,7 @@ export const variants: VariantMap = {
 After generating variants, edit the host file and insert the Varium picker where the user is deciding.
 
 Requirements:
-- Import `VariantPicker` from `varium`
+- Import `VariantPicker` from `@varium/core`
 - Import the `variants` object from the generated `.variants.tsx` file
 - Wrap the picker block with `VARIUM:START` and `VARIUM:END` comments
 - Use a descriptive `slot` value such as `testimonials`, `pricing`, or `hero`
@@ -67,7 +67,7 @@ Framework-tailored example:
 
 ```tsx
 // {{HOST_FILE}}
-import { VariantPicker } from "varium";
+import { VariantPicker } from "@varium/core";
 import { variants } from "{{VARIANTS_IMPORT}}";
 
 export default function Page() {

@@ -9,7 +9,7 @@ $ARGUMENTS
 Follow the Varium workflow exactly:
 - generate 3 distinct variants unless the user asked otherwise
 - create `ComponentName.variants.tsx`
-- mount `VariantPicker` from `varium`
+- mount `VariantPicker` from `@varium/core`
 - ask the user to choose a variant using native selection UI when available
 - after selection, keep the chosen variant and remove temporary review state
 

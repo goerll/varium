@@ -1,4 +1,4 @@
-import type { VariantMap } from "varium";
+import type { VariantMap } from "@varium/core";
 
 const customerNotes = [
   {
