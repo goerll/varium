@@ -47,7 +47,7 @@ The host page temporarily mounts the picker:
 
 ```tsx
 import { VariantPicker } from "@varium/core";
-import { variants } from "@/components/Testimonials.variants";
+import { variants } from "@/components/SectionReview.variants";
 
 export default function Page() {
   return (
@@ -55,8 +55,8 @@ export default function Page() {
       <Hero />
       <Logos />
 
-      {/* VARIUM:START slot="testimonials" */}
-      <VariantPicker variants={variants} slot="testimonials" />
+      {/* VARIUM:START slot="proof" */}
+      <VariantPicker variants={variants} slot="proof" />
       {/* VARIUM:END */}
 
       <Footer />
@@ -69,10 +69,11 @@ After the page is staged, the agent should ask the user to choose one of the var
 For example:
 
 ```txt
-Choose a variant for testimonials:
-1. Structured Proof
-2. Wallet Ribbon
-3. Case Study Band
+Choose a variant for this section:
+1. Editorial Band
+2. Quiet Comparison
+3. Split Context
+4. Focal Statement
 
 Reply with the number or the variant name.
 ```
@@ -82,7 +83,7 @@ The agent should then replace the picker with the chosen component and delete th
 ## Skill setup
 `npx @varium/core init` installs the Varium skill into the right directories for the agents you choose. The generated skill defines:
 
-- generate exactly 3 variants by default
+- generate at least 4 variants by default
 - name variants by visual character, not sequence
 - export a typed `variants` map
 - insert the picker between `VARIUM:START` and `VARIUM:END`
@@ -95,9 +96,9 @@ If you need the raw source template, it lives at [`skill/SKILL.md`](/home/esteva
 
 After `npx @varium/core init`:
 
-- Claude Code can use `/varium make a testimonial section`
-- OpenCode can use `/varium make a testimonial section`
-- Codex and other `.agents`-compatible runtimes can use `use varium to make a testimonial section`
+- Claude Code can use `/varium make a feature comparison section`
+- OpenCode can use `/varium make a feature comparison section`
+- Codex and other `.agents`-compatible runtimes can use `use varium to make a feature comparison section`
 
 ## Demo
 
@@ -116,6 +117,28 @@ The example app lives at [`skill/examples/vite-react`](/home/estevao/varium/skil
 pnpm install
 pnpm build
 ```
+
+## Release
+
+Releases are published by GitHub Actions when a version tag is pushed.
+
+Before the first release through CI, add an `NPM_TOKEN` repository secret in GitHub with publish access to `@varium/core`.
+
+To publish a new version:
+
+```bash
+cd packages/varium
+npm version patch --no-git-tag-version
+
+cd ../..
+VERSION="$(node -p "require('./packages/varium/package.json').version")"
+git add packages/varium/package.json
+git commit -m "chore: release @varium/core v$VERSION"
+git tag "v$VERSION"
+git push origin main --tags
+```
+
+The publish workflow verifies that the tag version matches `packages/varium/package.json`, runs install/build/lint, and publishes `@varium/core` to npm with provenance.
 
 ## Media
 

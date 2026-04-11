@@ -44,21 +44,21 @@ The `.agents` skill is always written so repos have a least-common-denominator s
 
 After `init`:
 
-- Claude Code: `/varium make a testimonial section`
-- OpenCode: `/varium make a testimonial section`
-- Codex and other `.agents`-compatible runtimes: `use varium to make a testimonial section`
+- Claude Code: `/varium make a feature comparison section`
+- OpenCode: `/varium make a feature comparison section`
+- Codex and other `.agents`-compatible runtimes: `use varium to make a feature comparison section`
 
 ## Example
 
 ```tsx
 import { VariantPicker } from "@varium/core";
-import { variants } from "@/components/Testimonials.variants";
+import { variants } from "@/components/SectionReview.variants";
 
 export default function Page() {
   return (
     <main>
-      {/* VARIUM:START slot="testimonials" */}
-      <VariantPicker variants={variants} slot="testimonials" />
+      {/* VARIUM:START slot="proof" */}
+      <VariantPicker variants={variants} slot="proof" />
       {/* VARIUM:END */}
     </main>
   );

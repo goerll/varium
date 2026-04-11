@@ -1,3 +1,8 @@
+---
+name: varium-design
+description: Generates multiple high-quality UI design variants for a React component. Use when asked to design, redesign, or create variants for any UI section or component.
+---
+
 # Varium Design Skill
 
 ## What you are doing
@@ -9,37 +14,26 @@ Generate at least 4 variants unless the user explicitly asks for a different cou
 Four gives enough range for meaningful structural exploration without turning the review into noise.
 
 ## Design thinking before coding
-Before writing any code, work through this sequence explicitly. Do not skip to implementation.
+Before writing variants, identify the shared intention of the section first.
+All variants should solve the same product problem, but they should do it through clearly different design approaches.
 
-**Step 1: Name the section's job.**
-What is this section trying to make the viewer feel or believe? Not what it contains — what it does. "Prove that real teams use this product." "Make the pricing feel obvious and fair." "Create the moment the visitor decides to sign up." One sentence.
-
-**Step 2: Audit the page's visual system.**
-Read the surrounding components and extract the actual design language in use. Note: type scale, weight range, color palette, spacing rhythm, border treatment, shadow usage, surface color, and whether the page earns its credibility through restraint or through energy.
-
-**Step 3: Plan four genuinely different bets.**
-Before naming a single variant, plan four structurally different approaches to the section's job. Each should feel like a different hypothesis about what would work best — not a different skin on the same wireframe.
-
-For each planned variant, write one sentence naming its organizing idea. If two sentences sound similar, one of those variants is not different enough yet.
-
-**Step 4: Assign type strategy per variant.**
-Decide the typographic approach for each variant before touching layout. What carries the weight? What steps back? Is there a scale extreme? A weight contrast? A tracking choice that sets the tone?
-
-**Step 5: Build.**
-Only after steps 1–4 are clear, write the components.
+For each variant, choose a distinct point of view across:
+- layout and spatial structure
+- typographic hierarchy and font personality
+- visual tone and emotional character
+- density, rhythm, and information flow
+- degree of boldness or restraint
 
 Think in terms of different strategies, not different skins.
 Good contrast:
-- one variant centers a single oversized statement, type does all the work
-- one variant uses a structured grid with precise, product-like density
-- one variant takes a clear creative risk — unexpected scale, unexpected framing
-- one variant is quieter and more editorial, letting content breathe
+- one variant could be editorial and spacious
+- one could be structured and product-like
+- one could be bold, dramatic, or unexpected
 
 Bad contrast:
 - same layout with different colors
 - same card grid with minor spacing changes
 - same typography with only background treatment swapped
-- four variants that all start with a centered heading and subheading
 
 ## Page fit first
 Before inventing a direction, inspect the surrounding page and extract its actual visual system:
@@ -71,79 +65,29 @@ Bad names:
 
 ## Design quality rules
 - Every variant must have a distinct point of view. They should feel like different approaches to the same intention, not siblings from the same template.
-- Do not ship near-duplicates with palette swaps, spacing nudges, or the same layout repeated with cosmetic tweaks.
-- Change typography, spacing rhythm, composition, and tone between variants.
-- Vary the overall concept aggressively enough that a user can make a real directional choice.
-- Explore different presentation models for the same content. The difference should often come from structure first, not color first.
+- Do not ship near-duplicates. Change typography, spacing rhythm, composition, and tone — not just color or outline treatment.
+- Vary the overall concept aggressively enough that a user can make a real directional choice. The difference should come from structure first, not color first.
 - At least one variant should take a creative risk while remaining production-ready.
 - Keep contrast accessible and layouts responsive.
-- Avoid generic AI aesthetics. Pick an intentional visual direction and follow through.
-- Variants should feel ready to keep, not like sketches.
-- Use the spirit of a strong frontend design skill: commit to a clear aesthetic direction, execute it precisely, and avoid bland middle-of-the-road design.
+- Avoid generic AI aesthetics. Commit to a clear aesthetic direction and follow through.
 - Choose fonts, hierarchy, spacing, and backgrounds intentionally. Do not default to generic UI patterns, default font stacks, or interchangeable component compositions.
 
-## Typography as structure
-Typography is not decoration. It is the primary structural tool in most well-designed sections. Treat it as such before reaching for color, shadows, or layout chrome.
-
-The most common agent failure mode is inheriting the page's body font and body size for everything, then compensating with visual elements to create interest. Instead, let type do the work.
-
-Before writing a single line of layout code, decide the typographic strategy for each variant:
-
-**Scale contrast.** A heading at 72px next to a label at 11px creates tension that most UI never achieves. Most generated components live in a narrow band of 14–32px and feel flat as a result. Consider extreme scale contrast as a compositional tool — one number, one word, one phrase at a size that commands the section.
-
-**Weight as hierarchy.** The difference between 300 and 800 within the same typeface is more powerful than switching families. A single word in black weight surrounded by light text reads immediately. Use this.
-
-**Tracking and leading as tone.** Wide tracking on uppercase labels (`letter-spacing: 0.15em`) reads as editorial and considered. Tight leading on a large heading creates density and confidence. Loose leading on body text creates calm. These are not stylistic flourishes — they change the emotional register of the section.
-
-**Type-only variants are valid.** Some of the strongest sections have no icons, no cards, no decorative elements — just text set with precision. If the content is strong, consider at least one variant that commits entirely to typographic composition.
-
-**Mixing type roles.** A section can use a serif for the heading, a monospace for labels or data, and a grotesque for body — if the page allows it. Do not stay within one family out of habit unless the design calls for it. Contrast between type roles creates sophistication when handled with restraint.
-
-## The one organizing idea
-Every strong variant has a single dominant visual decision that everything else supports. You should be able to name it in one sentence.
-
-Examples of named organizing ideas:
-- "The metric is the hero — everything else steps back"
-- "The quote floats in open space, the attribution is tiny and precise"
-- "Two columns in strict tension, no decoration"
-- "Typographic weight contrast carries the whole composition"
-- "The section reads as a list, not a layout — rhythm over decoration"
-
-If you cannot name the organizing idea of a variant in one sentence, the variant does not have one yet. Keep editing until it does.
-
-This is also a useful test for near-duplicates: if two variants have the same organizing idea expressed slightly differently, they are the same variant. Pick one and make the other genuinely different.
-
-## Reference vocabulary
-When interpreting aesthetic directions, ground them in specific reference points rather than abstract adjectives. These are real design sensibilities with specific executional signatures:
-
-**Linear / Vercel / Raycast** — product-led, dark surfaces, subtle borders at low opacity, monospace details, high information density with no waste, neutral without being boring. Restraint as a signal of confidence.
-
-**Stripe** — editorial clarity at scale. Generous whitespace. Helvetica-era precision. Every element earns its place through function. Nothing decorative. Proof through specificity, not volume.
-
-**Are.na / Typewolf editorial** — cultural, almost academic. Type-first. Grid-aware. Would not look wrong in a print publication. Color is rare and intentional.
-
-**Notion / Linear docs** — functional warmth. Readable above all. Hierarchy through weight and size alone. No chrome.
-
-**NYT / The Atlantic** — hierarchy through type scale and column structure. Pull quotes as architectural elements. Photo and text as equals. Editorial authority without stiffness.
-
-**Figma community / Dribbble maximalism** — gradients, glass, glow, illustration, color. Use only when the surrounding page already commits to this register. Never default to it.
-
-When a user asks for something "clean" or "minimal", they usually mean Linear or Stripe, not an empty page. When they ask for something "editorial", they usually mean Are.na or NYT, not a magazine pastiche. Use these as mental anchors, not templates.
-
 ## Visual restraint
-- Default to clean, restrained design. Do not add gradients, glow effects, glassmorphism, noise textures, floating pills, or decorative ornaments unless the user asked for them or the existing page already uses them in a way that the new section should match.
-- Treat gradients as an exception, not a default. If the surrounding page is flat, neutral, or minimally styled, your variants should respect that.
+- Default to clean, restrained design. Do not add gradients, glow effects, glassmorphism, noise textures, floating pills, or decorative ornaments unless the surrounding page already uses them. Respect the register of the page.
 - Decorative badges, status pills, and tiny labels must earn their place. If a label like `Active`, `New`, or `Architecture` does not add real meaning, remove it.
 - Strong shadows are also an exception. If the page does not already rely on obvious elevation, avoid introducing pronounced card shadows or artificial depth.
 - Do not use visual treatment to compensate for weak hierarchy or weak content.
 
+## Patterns to avoid
+
+**Card nesting.** Do not wrap content inside cards as a default container. Cards are appropriate for interactive, selectable, or navigable items — not for static proof points, feature lists, or statistics. Nesting cards inside other cards, or stacking multiple card layers, creates visual noise and flattens hierarchy. When items need grouping, use spacing, ruled dividers, or typographic weight instead of borders and backgrounds.
+
+**Decorative letter-spacing.** Wide tracking on labels — setting text l i k e t h i s — is a pattern that signals "designed" without making a design decision. Avoid applying it broadly. If the surrounding page does not already use spaced tracking, do not introduce it. When used, keep it to a single short uppercase label per section, at a maximum of `letter-spacing: 0.12em`, and only when paired with a size and weight choice that gives it a clear purpose.
+
 ## Content discipline
 - Design the component around the actual message, not around placeholder UI patterns.
 - Avoid repeating the same idea in the eyebrow, heading, subheading, cards, footer notes, and badges. If two lines say nearly the same thing, consolidate them.
-- Every piece of copy should have a job. The eyebrow sets context.
-- Every piece of copy should have a job. The heading makes the main point.
-- Every piece of copy should have a job. Supporting text adds only necessary clarification.
-- Every piece of copy should have a job. Labels inside the component should add specific meaning.
+- Every piece of copy should have a job: the eyebrow sets context, the heading makes the main point, supporting text adds only necessary clarification, labels add specific meaning.
 - Do not overwhelm the viewer with redundant descriptors, repeated section summaries, or ornamental microcopy.
 - Prefer fewer, sharper content elements over a busier layout full of weak copy.
 
@@ -157,7 +101,6 @@ When a user asks for something "clean" or "minimal", they usually mean Linear or
 ## Structural diversity between variants
 - The variants must differ in component architecture, not just styling.
 - At least two variants should change the layout pattern itself: for example a stacked content band, a split media-and-content layout, a single focal panel, a comparison row, an editorial narrative block, a proof grid, or a step-based structure.
-- Do not generate multiple versions of the same repeated-card layout with different borders, shadows, or accent colors.
 - Change how the eye moves through the section, how content is grouped, and what element carries the visual weight.
 - A good set of variants should make the user compare different ideas for presenting the message, not different skins for the same wireframe.
 - Use the same content to test different compositional bets. For example:
@@ -167,18 +110,23 @@ When a user asks for something "clean" or "minimal", they usually mean Linear or
 - When the section naturally contains repeated items, avoid defaulting to a row of matching cards unless that is genuinely the strongest direction for the page.
 - Do not treat layout diversity as decoration. The structure should change what feels primary, what feels supporting, and how the viewer scans the section.
 
+## Surface treatment and background
+
+For sections that risk feeling empty or flat, consider whether a background treatment would genuinely improve the design. This is contextual — many sites are better served by a clean white or neutral surface.
+
+When it fits the page's character, explore options such as subtle grid or dot patterns, a gentle texture, a tonal gradient that stays within the page's existing palette, or a section that breaks the page's background color with a dark or contrasting band. The right choice depends entirely on what the surrounding page already does. Extract that language first, then decide if a treatment would elevate the section or add noise.
+
+For sections featuring people — testimonials, team, case studies — consider a split layout where a real photo occupies one half of the section at full bleed with no border or card. Use Unsplash source URLs for placeholder images during review: `https://source.unsplash.com/featured/?[relevant,keywords]`. Leave a comment marking these as placeholders to replace. Do not force images into sections where the content does not call for them.
+
 ## Diversity check
 Before finalizing the variants, verify:
-- each variant has a named organizing idea you can state in one sentence — if you cannot name it, keep editing
 - each variant would still be identifiable if shown in grayscale
 - each variant has a different dominant visual idea
 - at least one variant changes the composition, not just the styling
-- at least one variant makes a strong typographic decision, not just a layout decision
 - the set feels curated, not automatically permuted
 - each variant feels edited, with unnecessary copy and decoration removed
 - the surrounding page and the new section feel like they belong to the same product
 - the variants differ in layout pattern, not just color and outline treatment
-- no two variants share the same organizing idea expressed slightly differently
 
 ## File naming convention
 - Create the variants file beside the target component using `ComponentName.variants.tsx`.
