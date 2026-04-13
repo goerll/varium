@@ -1,6 +1,6 @@
 {
   "name": "@varium/core",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Agent-driven UI variant generation and in-browser review for React apps",
   "license": "MIT",
   "repository": {
