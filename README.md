@@ -1,22 +1,43 @@
 # Varium
 
-Varium is an open-source toolkit for agent-driven UI exploration in React apps. An agent generates multiple production-ready component variants beside the target component, Varium renders those options inside the real page with an in-browser picker, and the agent then asks the user to choose a winner through a native question flow when available or a numbered list in chat.
+Varium is an open-source toolkit for agent-driven UI exploration. An agent generates multiple production-ready component variants, Varium renders those options inside the real page with an in-browser picker, and the agent asks the user to choose a winner through a native question flow or numbered list in chat.
 
 ## What it includes
 
-- `packages/varium`: the runtime package, CLI, and bundled templates
-- `skill/SKILL.md`: the agent-facing protocol for generating and committing variants
+- `packages/varium`: the npm package (`@varium/core`) with runtime and CLI
+- `skills/varium/`: the agent skill with multi-framework components
+  - `components/react/`: React VariantPicker
+  - `components/svelte/`: Svelte VariantPicker
+  - `components/vue/`: Vue VariantPicker
 - `skill/examples/vite-react`: the primary working demo
-- `skill/examples/next-app`: reserved for the roadmap Next.js example
 
 ## Install
+
+**Option 1: Skill-based (recommended)**
+
+```bash
+npx skills add https://github.com/goerll/varium --skill varium
+```
+
+The agent handles everything from there.
+
+**Option 2: npm package + init**
 
 ```bash
 pnpm add -D @varium/core
 npx @varium/core init
 ```
 
-`npx @varium/core init` detects the framework, asks which agents should be configured, always installs the shared skill into `.agents/skills/varium`, and adds `/varium` command wrappers for Claude Code and OpenCode when selected.
+`init` detects the framework, installs the shared skill, and adds `/varium` command wrappers for Claude Code and OpenCode.
+
+## How it works
+
+1. **Install the skill** (one-time per workspace)
+2. **Ask the agent** to design a section with variants
+3. **Agent detects framework** (React/Svelte/Vue) from project files
+4. **Agent generates 4 variants** in the project's syntax
+5. **Review in-browser** and pick a direction
+6. **Agent commits** the chosen variant and cleans up
 
 ## Variant protocol
 
@@ -24,7 +45,9 @@ Agents generate a sibling file beside the target component:
 
 ```txt
 src/components/Testimonials.tsx
-src/components/Testimonials.variants.tsx
+src/components/Testimonials.variants.tsx      # React
+src/components/Testimonials.variants.svelte   # Svelte
+src/components/Testimonials.variants.vue      # Vue
 ```
 
 That file exports a named `variants` object:
@@ -65,8 +88,7 @@ export default function Page() {
 }
 ```
 
-After the page is staged, the agent should ask the user to choose one of the variant names.
-For example:
+After the page is staged, the agent asks the user to choose:
 
 ```txt
 Choose a variant for this section:
@@ -78,10 +100,21 @@ Choose a variant for this section:
 Reply with the number or the variant name.
 ```
 
-The agent should then replace the picker with the chosen component and delete the `.variants.tsx` file.
+The agent then replaces the picker with the chosen component and deletes the `.variants.*` file.
+
+## Framework detection
+
+The agent automatically detects the framework:
+
+1. `svelte.config.js` or `*.svelte` files → **Svelte**
+2. `vue.config.js` or `*.vue` files → **Vue**
+3. `package.json` with `"react"` or `*.tsx` files → **React** (default)
+
+The appropriate `VariantPicker` component is copied into the project based on detection.
 
 ## Skill setup
-`npx @varium/core init` installs the Varium skill into the right directories for the agents you choose. The generated skill defines:
+
+After `npx @varium/core init`, the skill defines:
 
 - generate at least 4 variants by default
 - name variants by visual character, not sequence
@@ -90,15 +123,13 @@ The agent should then replace the picker with the chosen component and delete th
 - ask for selection using native tools when available
 - accept a numbered reply or variant name as fallback
 
-If you need the raw source template, it lives at [`skill/SKILL.md`](/home/estevao/varium/skill/SKILL.md).
-
 ## Commands
 
 After `npx @varium/core init`:
 
-- Claude Code can use `/varium make a feature comparison section`
-- OpenCode can use `/varium make a feature comparison section`
-- Codex and other `.agents`-compatible runtimes can use `use varium to make a feature comparison section`
+- Claude Code: `/varium make a feature comparison section`
+- OpenCode: `/varium make a feature comparison section`
+- Codex and other `.agents`-compatible runtimes: `use varium to make a feature comparison section`
 
 ## Demo
 
@@ -109,7 +140,7 @@ pnpm install
 pnpm --filter @varium/example-vite-react dev
 ```
 
-The example app lives at [`skill/examples/vite-react`](/home/estevao/varium/skill/examples/vite-react) and demonstrates the full loop.
+The example app lives at `skill/examples/vite-react` and demonstrates the full loop.
 
 ## Development
 
@@ -140,10 +171,6 @@ git push origin main --tags
 
 The publish workflow verifies that the tag version matches `packages/varium/package.json`, runs install/build/lint, and publishes `@varium/core` to npm with provenance.
 
-## Media
-
-Capture a short GIF or video of the Vite demo once you are ready to publish. The repository is structured for that asset, but the media itself is not checked in yet.
-
 ## License
 
-MIT. See [`LICENSE`](/home/estevao/varium/LICENSE).
+MIT. See `LICENSE`.

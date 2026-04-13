@@ -1,13 +1,24 @@
 ---
 name: varium-design
-description: Generates multiple high-quality UI design variants for a React component. Use when asked to design, redesign, or create variants for any UI section or component.
+description: Generates multiple high-quality UI design variants for any component (React, Svelte, Vue). Use when asked to design, redesign, or create variants for any UI section or component.
 ---
 
 # Varium Design Skill
 
 ## What you are doing
-You are generating multiple high-quality UI design variants for a React component.
+You are generating multiple high-quality UI design variants for a component.
 The user will review those variants in-browser with Varium and choose a direction to keep.
+
+## Framework detection
+Detect the framework by inspecting project files:
+
+1. Check for `svelte.config.js`, `.svelte` files, or `svelte-kit.config.js` → **Svelte**
+2. Check for `vue.config.js`, `vite.config.ts` with Vue plugin, or `components/*.vue` → **Vue**
+3. Check for `package.json` with `"react"`, `*.tsx` files, or `next.config.js` → **React** (default)
+4. If ambiguous, ask the user which framework
+
+Use the appropriate VariantPicker component from the skill's `components/{framework}/` directory.
+Generate variants in the target framework's syntax.
 
 ## How many variants
 Generate at least 4 variants unless the user explicitly asks for a different count.
@@ -84,6 +95,26 @@ Bad names:
 
 **Decorative letter-spacing.** Wide tracking on labels — setting text l i k e t h i s — is a pattern that signals "designed" without making a design decision. Avoid applying it broadly. If the surrounding page does not already use spaced tracking, do not introduce it. When used, keep it to a single short uppercase label per section, at a maximum of `letter-spacing: 0.12em`, and only when paired with a size and weight choice that gives it a clear purpose.
 
+
+## Invented product UI as visual content
+
+When a section calls for feature cards or capability showcases, the strongest approach is often to show the product rather than describe it. Instead of icons or illustrations, build a small invented UI scene inline in JSX that represents what the feature actually does.
+
+This is intentional placeholder work — the goal is visual credibility during review so the user can make a real directional decision. The user will replace or refine the content later. Invent freely.
+
+Examples of invented UI scenes worth building inline:
+- a simplified chart or graph using divs, SVG, or CSS — no library needed, just a convincing shape
+- a mock notification feed with two or three hardcoded items and realistic-looking text
+- a miniature form, card, or data table with plausible field names and values
+- overlapping document mockups at slight offsets to suggest depth and activity
+- a status timeline or step indicator showing a real-looking workflow
+
+When using this approach, keep the card container quiet — light surface, soft radius, no heavy shadow. All the visual interest should live in the invented content, not the frame. The label and description below the scene should be small and secondary; the scene carries the weight.
+
+Compositing adds depth: elements at slight rotations, overlapping layers, a badge or tag placed over a mockup. This creates the sense of looking into a product rather than at a diagram of one. Pure CSS and inline styles are enough.
+
+This pattern is appropriate for feature sections, capability grids, and product overviews. It is not appropriate for testimonials, pricing, or purely typographic sections.
+
 ## Content discipline
 - Design the component around the actual message, not around placeholder UI patterns.
 - Avoid repeating the same idea in the eyebrow, heading, subheading, cards, footer notes, and badges. If two lines say nearly the same thing, consolidate them.
@@ -129,11 +160,11 @@ Before finalizing the variants, verify:
 - the variants differ in layout pattern, not just color and outline treatment
 
 ## File naming convention
-- Create the variants file beside the target component using `ComponentName.variants.tsx`.
-- Export a named `variants` object typed as `VariantMap` from `@varium/core`.
-- Each entry in `variants` must be a zero-argument React component.
+- Create the variants file beside the target component using `ComponentName.variants.{tsx|svelte|vue}`.
+- Export a named `variants` object typed as `VariantMap`.
+- Each entry in `variants` must be a zero-argument component function.
 
-Example:
+React example:
 
 ```tsx
 import type { VariantMap } from "@varium/core";
@@ -149,20 +180,51 @@ export const variants: VariantMap = {
 };
 ```
 
+Svelte example (`ComponentName.variants.svelte.ts`):
+
+```typescript
+import type { VariantMap } from "./types";
+
+const DarkMinimal = () => ({ render: () => ({ component: 'section' }) });
+// ... (Svelte variant components)
+
+export const variants: VariantMap = {
+  "Dark Minimal": DarkMinimal,
+  // ...
+};
+```
+
+Vue example:
+
+```vue
+<script setup lang="ts">
+import type { VariantMap } from "./types";
+
+const DarkMinimal = () => ({ template: '<section>...</section>' });
+// ... (Vue variant components)
+
+const variants: VariantMap = {
+  "Dark Minimal": DarkMinimal,
+  // ...
+};
+</script>
+```
+
 ## Picker integration
 After generating variants, edit the host page and insert the Varium picker where the user is deciding.
 
 Requirements:
-- Import `VariantPicker` from `@varium/core`
-- Import the `variants` object from the generated `.variants.tsx` file
+- Copy the pre-built `VariantPicker.min.js` from the skill's `components/{framework}/dist/` directory into the user's project
+- Import `VariantPicker` from the copied file
+- Import the `variants` object from the generated `.variants.{tsx|svelte|vue}` file
 - Wrap the picker block with `VARIUM:START` and `VARIUM:END` comments
 - Use a descriptive `slot` value such as `proof`, `pricing`, `hero`, or `feature-comparison`
 
-Example:
+React example:
 
 ```tsx
-import { VariantPicker } from "@varium/core";
-import { variants } from "@/components/SectionReview.variants";
+import { VariantPicker } from "./VariantPicker.min.js";
+import { variants } from "./SectionReview.variants";
 
 export default function Page() {
   return (
@@ -180,13 +242,56 @@ export default function Page() {
 }
 ```
 
+Svelte example:
+
+```svelte
+<script>
+  import VariantPicker from "./VariantPicker.svelte";
+  import { variants } from "./SectionReview.variants";
+</script>
+
+<main>
+  <Hero />
+  <Logos />
+
+  <!-- VARIUM:START slot="proof" -->
+  <VariantPicker {variants} slot="proof" />
+  <!-- VARIUM:END -->
+
+  <Footer />
+</main>
+```
+
+Vue example:
+
+```vue
+<script setup>
+import VariantPicker from "./VariantPicker.vue";
+import { variants } from "./SectionReview.variants";
+</script>
+
+<template>
+  <main>
+    <Hero />
+    <Logos />
+
+    <!-- VARIUM:START slot="proof" -->
+    <VariantPicker :variants="variants" slot="proof" />
+    <!-- VARIUM:END -->
+
+    <Footer />
+  </template>
+</main>
+```
+
 ## Validation before handoff
-Before asking the user to review variants, run the lightest available validation that can catch problems introduced by your changes and fix any issues you created.
+Before asking the user to review variants, run lint to catch problems introduced by your changes and fix any issues you create.
 
 Validation priority:
-1. Check the generated `.variants.tsx` file and the edited host file for obvious lint issues.
-2. If the repository has a fast lint or typecheck command, run it.
-3. If the repository has a fast build or preview validation path, use it when practical.
+1. Run `pnpm lint` (or the repository's lint command).
+2. Run `pnpm tsc --noEmit` if available.
+
+Do not run build. Lint and typecheck are sufficient for agent-generated variants.
 
 Requirements:
 - Remove unused imports, dead helpers, and stale utility imports.
