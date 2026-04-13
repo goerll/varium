@@ -1,8 +1,11 @@
 node_modules
-dist
 .DS_Store
 *.log
 coverage
 .turbo
 .vite
 *.tsbuildinfo
+
+# Build outputs
+packages/*/dist
+skills/varium/examples/*/dist
