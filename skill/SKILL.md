@@ -1,6 +1,6 @@
 ---
 name: varium-design
-description: Generates multiple high-quality UI design variants for any component (React, Svelte, Vue). Use when asked to design, redesign, or create variants for any UI section or component.
+description: Generates multiple high-quality UI design variants for a component. Use when asked to design, redesign, or create variants for any UI section or component.
 ---
 
 # Varium Design Skill
@@ -10,15 +10,26 @@ You are generating multiple high-quality UI design variants for a component.
 The user will review those variants in-browser with Varium and choose a direction to keep.
 
 ## Framework detection
-Detect the framework by inspecting project files:
 
-1. Check for `svelte.config.js`, `.svelte` files, or `svelte-kit.config.js` → **Svelte**
-2. Check for `vue.config.js`, `vite.config.ts` with Vue plugin, or `components/*.vue` → **Vue**
-3. Check for `package.json` with `"react"`, `*.tsx` files, or `next.config.js` → **React** (default)
-4. If ambiguous, ask the user which framework
+Detect the framework from the repository before generating variants.
 
-Use the appropriate VariantPicker component from the skill's `components/{framework}/` directory.
-Generate variants in the target framework's syntax.
+1. Check for `svelte.config.js`, `svelte-kit.config.js`, or `.svelte` files -> Svelte
+2. Check for `.vue` files or Vue-specific Vite config -> Vue
+3. Check for `react` in `package.json`, `next.config.*`, or `.tsx` files -> React
+4. If ambiguous, ask the user
+
+Only copy the asset files relevant to the detected framework from `skill/assets/`.
+
+## Reference topics
+
+When making specific technical decisions during variant construction, consult the relevant topic file:
+
+- **Color** (palette, greys, contrast, accessibility) → `topics/color.md`
+- **Typography** (scale, line-height, line length, font choice, weight) → `topics/typography.md`
+- **Spacing and layout** (whitespace, grouping, component width, separation) → `topics/spacing.md`
+- **Depth and shadows** (elevation, shadows, layering, overlap) → `topics/depth.md`
+
+Only read the file relevant to the decision at hand. Do not read all topic files upfront.
 
 ## How many variants
 Generate at least 4 variants unless the user explicitly asks for a different count.
@@ -160,14 +171,15 @@ Before finalizing the variants, verify:
 - the variants differ in layout pattern, not just color and outline treatment
 
 ## File naming convention
-- Create the variants file beside the target component using `ComponentName.variants.{tsx|svelte|vue}`.
+- Create the variants file beside the target component using the native framework extension.
+- Use `ComponentName.variants.tsx` for React, `ComponentName.variants.svelte` for Svelte, and `ComponentName.variants.vue` for Vue.
 - Export a named `variants` object typed as `VariantMap`.
 - Each entry in `variants` must be a zero-argument component function.
 
-React example:
+Example:
 
 ```tsx
-import type { VariantMap } from "@varium/core";
+import type { VariantMap } from "./types";
 
 const DarkMinimal = () => <section>{/* ... */}</section>;
 const EditorialGrid = () => <section>{/* ... */}</section>;
@@ -180,51 +192,22 @@ export const variants: VariantMap = {
 };
 ```
 
-Svelte example (`ComponentName.variants.svelte.ts`):
-
-```typescript
-import type { VariantMap } from "./types";
-
-const DarkMinimal = () => ({ render: () => ({ component: 'section' }) });
-// ... (Svelte variant components)
-
-export const variants: VariantMap = {
-  "Dark Minimal": DarkMinimal,
-  // ...
-};
-```
-
-Vue example:
-
-```vue
-<script setup lang="ts">
-import type { VariantMap } from "./types";
-
-const DarkMinimal = () => ({ template: '<section>...</section>' });
-// ... (Vue variant components)
-
-const variants: VariantMap = {
-  "Dark Minimal": DarkMinimal,
-  // ...
-};
-</script>
-```
-
 ## Picker integration
 After generating variants, edit the host page and insert the Varium picker where the user is deciding.
 
 Requirements:
-- Copy the pre-built `VariantPicker.min.js` from the skill's `components/{framework}/dist/` directory into the user's project
-- Import `VariantPicker` from the copied file
-- Import the `variants` object from the generated `.variants.{tsx|svelte|vue}` file
+- Copy the minimal picker asset from `skill/assets/{framework}/` into the user's project.
+- For React, prefer `skill/assets/react/VariantPicker.min.js` when a bundled picker is easier than copying source files.
+- Import `VariantPicker` from the copied local file.
+- Import the `variants` object from the generated variants file.
 - Wrap the picker block with `VARIUM:START` and `VARIUM:END` comments
 - Use a descriptive `slot` value such as `proof`, `pricing`, `hero`, or `feature-comparison`
 
-React example:
+Example:
 
 ```tsx
 import { VariantPicker } from "./VariantPicker.min.js";
-import { variants } from "./SectionReview.variants";
+import { variants } from "@/components/SectionReview.variants";
 
 export default function Page() {
   return (
@@ -242,56 +225,12 @@ export default function Page() {
 }
 ```
 
-Svelte example:
-
-```svelte
-<script>
-  import VariantPicker from "./VariantPicker.svelte";
-  import { variants } from "./SectionReview.variants";
-</script>
-
-<main>
-  <Hero />
-  <Logos />
-
-  <!-- VARIUM:START slot="proof" -->
-  <VariantPicker {variants} slot="proof" />
-  <!-- VARIUM:END -->
-
-  <Footer />
-</main>
-```
-
-Vue example:
-
-```vue
-<script setup>
-import VariantPicker from "./VariantPicker.vue";
-import { variants } from "./SectionReview.variants";
-</script>
-
-<template>
-  <main>
-    <Hero />
-    <Logos />
-
-    <!-- VARIUM:START slot="proof" -->
-    <VariantPicker :variants="variants" slot="proof" />
-    <!-- VARIUM:END -->
-
-    <Footer />
-  </template>
-</main>
-```
-
 ## Validation before handoff
-Before asking the user to review variants, run lint to catch problems introduced by your changes and fix any issues you create.
+Before asking the user to review variants, run lint to catch problems introduced by your changes and fix any issues you created.
 
 Validation priority:
-1. Run `pnpm lint` (or the repository's lint command).
-2. Run `pnpm tsc --noEmit` if available.
-
-Do not run build. Lint and typecheck are sufficient for agent-generated variants.
+1. Run the repository's lint command.
+2. Run a fast typecheck command if the repository has one.
 
 Requirements:
 - Remove unused imports, dead helpers, and stale utility imports.
