@@ -1,8 +1,10 @@
-# Varium
+<p align="center">
+  <img src="./assets/varium_logo.svg" alt="Varium" width="220" />
+</p>
 
-Varium is a skill-first workflow for agent-driven UI variant generation.
+# varium
 
-Install it like Caveman:
+skill-first UI variant generation for agents.
 
 ```bash
 npx skills add goerll/varium
@@ -41,10 +43,8 @@ skill/
 
 ## Notes
 
-- The repo no longer ships a landing page.
-- The repo no longer ships a demo app.
-- The npm package has been removed.
 - `skill/SKILL.md` is the source of truth.
+- The logo lives at `assets/varium_logo.svg`.
 
 ## License
 
