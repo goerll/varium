@@ -6,9 +6,24 @@
 
 skill-first UI variant generation for agents.
 
+## Install
+
+For standard tools that use the shared `.agents/skills` layout, including Codex, OpenCode, and similar agents:
+
 ```bash
-npx skills add goerll/varium
+npx skills add goerll/varium --agent universal
 ```
+
+For Claude Code:
+
+```bash
+npx skills add goerll/varium --agent claude-code
+```
+
+Notes:
+
+- Claude Code is the special case because it uses `.claude/skills`, so the install command should explicitly target `claude-code`.
+- Add `-g` if you want a global install instead of a project-local one.
 
 ## What’s inside
 

@@ -1,9 +1,9 @@
 ---
-name: varium-design
+name: varium
 description: Generates multiple high-quality UI design variants for a component. Use when asked to design, redesign, or create variants for any UI section or component.
 ---
 
-# Varium Design Skill
+# Varium Skill
 
 ## What you are doing
 You are generating multiple high-quality UI design variants for a component.
@@ -253,23 +253,8 @@ After wiring the picker into the page, prefer a native agent selection flow over
 
 Selection priority:
 
-1. Use a native question or selection tool if the agent supports it.
-2. Otherwise present the variants as an enumerated list in chat.
-3. Only use manual commit text as a fallback.
-
-### Claude Code
-Prompt Claude Code to use its `AskUserQuestion` tool with the variant names as explicit options.
-
-Example instruction:
-
-```txt
-Use your AskUserQuestion tool and ask the user to choose a variant for this section. Options: Editorial Band, Quiet Comparison, Split Context, Focal Statement.
-```
-
-Treat the selected option as the committed variant.
-
-### Codex and other agents without native selection UI
-List the available variants in chat using a numbered list and tell the user they can reply with either the number or the variant name.
+1. Use a native question or selection tool if the agent supports it. (AskUserQuestion on Claude Code, question tool in OpenCode, etc)
+2. Otherwise present the variants as an enumerated list in chat and ask the user which one they prefer
 
 Example:
 
@@ -283,19 +268,9 @@ Choose a variant for this section:
 Reply with the number or the variant name.
 ```
 
+Treat the selected option as the committed variant.
+
 Normalize the user's response back to the exact variant name before proceeding.
-
-### Slash command usage
-If the repo has been initialized with Varium command files, `/varium ...` should route into this workflow directly for Claude Code and OpenCode.
-
-### Manual fallback
-If the environment cannot present choices directly, you may ask the user to reply with a message like:
-
-```txt
-varium: commit [slot=proof] [variant=Quiet Comparison]
-```
-
-Treat that message as the source of truth for the chosen variant.
 
 ## After user picks
 When the user identifies the variant they want through a selection tool, by replying with a number or name, or by giving you a valid Varium commit message:
@@ -303,8 +278,7 @@ When the user identifies the variant they want through a selection tool, by repl
 1. Extract or keep the chosen component under the canonical component file.
 2. Replace the `VariantPicker` block with the chosen component rendered directly.
 3. Delete the `.variants.tsx` file.
-4. Clean up unused imports and dead code.
-5. Leave the codebase in a production-ready state.
+4. Clean up unused imports and dead code to make sure page builds without errors.
 
 ## Guardrails
 - Do not leave `VariantPicker` mounted after the user has committed a choice.
