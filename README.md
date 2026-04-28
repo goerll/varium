@@ -56,6 +56,9 @@ skill/
     vue/
 ```
 
+## Disclaimer
+I made this to solve my personal problem of AI models being bad at frontend and my lack of design knowledge, this skill was in the making for some time but the final picker experience is heavily inspired by ui.sh and seeing it just made me more desireful that a FOSS alternative existed, make sure to give them a look!
+
 ## Notes
 
 - `skill/SKILL.md` is the source of truth.

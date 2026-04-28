@@ -20,17 +20,6 @@ Detect the framework from the repository before generating variants.
 
 Only copy the asset files relevant to the detected framework from `skill/assets/`.
 
-## Reference topics
-
-When making specific technical decisions during variant construction, consult the relevant topic file:
-
-- **Color** (palette, greys, contrast, accessibility) → `topics/color.md`
-- **Typography** (scale, line-height, line length, font choice, weight) → `topics/typography.md`
-- **Spacing and layout** (whitespace, grouping, component width, separation) → `topics/spacing.md`
-- **Depth and shadows** (elevation, shadows, layering, overlap) → `topics/depth.md`
-
-Only read the file relevant to the decision at hand. Do not read all topic files upfront.
-
 ## How many variants
 Generate at least 4 variants unless the user explicitly asks for a different count.
 Four gives enough range for meaningful structural exploration without turning the review into noise.
@@ -284,3 +273,151 @@ When the user identifies the variant they want through a selection tool, by repl
 - Do not leave `VariantPicker` mounted after the user has committed a choice.
 - Do not rename the chosen variant in a way that makes the commit message ambiguous.
 - Do not add runtime dependencies to the app just to support the variants workflow.
+
+## Reference Topics
+
+### Color
+
+#### Work in HSL, not hex
+
+When choosing or adjusting colors, think in HSL (hue, saturation, lightness) rather than hex codes. HSL maps directly to how color actually behaves: hue is the color identity, saturation is its intensity, lightness is how bright or dark it is. Adjusting one axis at a time gives predictable results.
+
+#### Grey is almost never truly neutral
+
+A grey with 0% saturation often looks sterile or slightly off next to colored elements. In practice, well-designed interfaces use greys that carry a subtle tint — a faint blue push for cool, clinical environments; a faint yellow-orange push for warmer, approachable ones. When the page already has an established color temperature, match it in your grey values to keep surfaces coherent.
+
+#### Build a palette with real range
+
+Most generated UI uses too few shades and runs out of room. A usable palette needs roughly 8–10 stops per color — from a near-white tint to a near-black shade — so you have something to reach for at every level of hierarchy. Without this range, you end up using the same shade for surfaces, borders, and text, which flattens everything.
+
+When building stops in a palette, lightness alone is a poor lever. As you lighten a color toward white, it loses saturation and looks washed out. To keep lighter stops feeling vivid, compensate by slightly increasing saturation and, for very light tints, nudging the hue a few degrees toward a brighter neighbor on the color wheel (yellow, cyan, or magenta). For darker stops, nudge toward a darker hue (red, green, or blue). This keeps the whole scale feeling like the same color rather than a gradient from vivid to grey.
+
+#### Hierarchy comes from color before opacity
+
+When you need secondary text on a colored background, don't reduce opacity. Opacity lets the background bleed through, making text look faded or disabled rather than intentionally secondary. Instead, hand-pick a new color at the same hue with adjusted saturation and lightness. The result reads as a deliberate hierarchy choice rather than a disabled state.
+
+The same logic applies to text on dark surfaces: the goal is reduced contrast relative to the background, not a lighter grey that ignores the background's hue entirely.
+
+#### Accessibility without harshness
+
+Meeting contrast requirements (4.5:1 for body text, 3:1 for large text) on colored backgrounds is harder than it looks. When white text on a vivid color doesn't meet the threshold without darkening the background too aggressively, consider flipping the approach: use dark text on a light tint of that color rather than light text on a saturated background. This achieves accessibility without the visual weight of a dark panel.
+
+For colored-on-colored text (for example, a secondary label inside a dark card), rotating the text hue toward a naturally brighter color — cyan, yellow, or magenta — can increase perceived brightness and contrast without moving toward pure white.
+
+#### Color supports hierarchy; it doesn't replace it
+
+A section should read correctly in greyscale before color is applied. Color is for reinforcement and tone — it should not be the only signal distinguishing primary from secondary content, positive from negative states, or active from inactive elements. Accompany color-coded meaning with a shape, weight, or positional signal as well.
+
+#### Accent use
+
+Strong accent colors draw attention. Use them for the one or two most important actions or data points in a section, not as a general highlight tool. When everything is accented, nothing is. If a section has a single CTA, one data metric, or one status badge that matters, the accent should go there and nowhere else.
+
+### Typography
+
+#### Define a scale, not a spectrum
+
+Pick discrete type sizes and use only those. A practical scale for interface work has around 8–10 stops: roughly 12, 14, 16, 18, 20, 24, 30, 36, 48, 60px. The exact values matter less than the principle — each step should feel visually distinct from the one below it. Avoid incremental nudging (16px vs 17px vs 18px) as it produces no visible hierarchy while multiplying decisions.
+
+Use `rem` or `px`, not `em` for scale definitions. `em` compounds inside nested elements and silently produces sizes that don't exist in your scale.
+
+#### Hierarchy through weight and color, not size alone
+
+Relying exclusively on font size to create hierarchy produces primary text that's too large and secondary text that's too small. Weight and color are more efficient tools:
+
+- Use a dark, high-contrast color for primary content
+- Use a muted mid-tone for secondary content (dates, metadata, captions)
+- Use an even softer tone for tertiary content (footnotes, helper text)
+- Use a heavier weight (600–700) for emphasis, a normal weight (400–500) for everything else
+
+Avoid weights below 400 for text smaller than ~24px — they become illegible at small sizes. To de-emphasize small text, reach for color, not thinness.
+
+#### Line-height scales inversely with size
+
+Small text needs generous line-height so the eye can track from line to line without losing its place — around 1.5 to 1.6 for body text at 14–16px. Large text needs less — headings at 36px and above can use 1.1 to 1.2 without feeling cramped. Headlines at display sizes (56px+) often work best at 1.0 or even slightly below.
+
+Line-height should also increase with line length. A narrow column at 400px can use 1.4; a wide column at 700px+ should use 1.7 or more, otherwise readers lose their place at the line return.
+
+#### Line length for readable prose
+
+Body text reads best at 45–75 characters per line. In CSS, a `max-width` of `60ch–70ch` on the text container handles this directly. Going wider increases the cognitive load of tracking from line end back to line start. Going narrower creates choppy rhythm that forces constant wrapping.
+
+This constraint applies even when the surrounding layout is wider — constrain the text column independently of the section width.
+
+#### Alignment
+
+Left-align almost everything. Center alignment works for short standalone elements (a single headline, a one-line subheading, a metric label) but breaks down immediately with paragraph text — ragged-right edges on both sides create visual instability after two or three lines.
+
+Right-align numbers in tables and data lists so decimal points and digit positions line up vertically, making values scannable at a glance.
+
+When mixing font sizes on the same baseline (a large value next to a small label, for example), align them to their text baseline rather than centering them vertically. Vertical centering of mixed sizes misaligns the optical reading line and looks slightly off in a way that's hard to diagnose.
+
+#### Letter-spacing
+
+Increase tracking (letter-spacing) only for short uppercase or small-caps labels at small sizes — this improves legibility of compressed letterforms. A value of `0.06em` to `0.1em` is usually enough; anything beyond `0.12em` becomes decorative rather than functional.
+
+Decrease tracking slightly for large display headings (36px+) — type designers set default spacing for body sizes, and large text benefits from tighter setting. A value of `-0.01em` to `-0.03em` on display text is often an improvement.
+
+Never add tracking to lowercase body text or sentence-case UI copy. It increases line length without adding legibility.
+
+#### Font selection signals
+
+Typeface choice sets the register of the whole section before a single layout decision is made:
+
+- A well-crafted geometric sans (like those with 10+ weights available on Google Fonts) reads as modern and neutral — appropriate for most product UI
+- A humanist sans adds warmth and approachability
+- A transitional or oldstyle serif suggests editorial authority, publishing, or premium positioning
+- A monospace face signals technical precision and is effective for data, code, or metric display
+
+Prefer fonts with a wide weight range (5+ weights). Families with this range tend to be more carefully constructed and give you more hierarchy options within a single typeface. Avoid condensed fonts for body text — they sacrifice x-height and spacing in ways that hurt legibility.
+
+When the page already uses a specific typeface, extend it with weight and size variation before introducing a second family. A second family earns its place by adding a clearly different role (display vs. body, or label vs. data), not by adding variety for its own sake.
+
+### Spacing
+
+#### Start with more space than you think you need
+
+The default failure mode is too little space. When in doubt, add more. Generous whitespace makes a section feel considered and intentional; cramped spacing makes it feel unfinished regardless of what else is well done. It's much easier to reduce spacing that feels excessive than to diagnose why something looks off when spacing is the problem.
+
+This applies at every level: between sections, between groups of elements within a section, and between individual elements within a group.
+
+#### Use a spacing scale, not arbitrary values
+
+Pick a spacing base unit (4px or 8px works well) and use multiples of it for all margin, padding, gap, and sizing decisions. This doesn't mean every value has to be exactly on the grid — small optical corrections are fine — but keeping values in a consistent family (4, 8, 12, 16, 24, 32, 48, 64, 96...) makes the spacing feel systematic rather than random.
+
+Arbitrary one-off values (23px, 37px) almost always signal that a spacing decision wasn't made from a principle — they should be resolved to the nearest system value.
+
+#### Spacing communicates grouping
+
+Elements that belong together should have less space between them than they have from unrelated elements. This sounds obvious but is frequently violated: equal spacing between a label and its input, and between consecutive form groups, makes it unclear which label belongs to which field.
+
+The rule: the space between a label and the thing it labels should be meaningfully smaller than the space between separate labeled groups. This applies to headings and their sections, list items and their sublists, and any parent-child content relationship.
+
+When a component already has internal borders or background color differences creating separation, you often don't need additional spacing to distinguish groups. Conversely, when there are no visual separators, spacing has to do all the work — and needs to be more deliberate.
+
+#### Don't fill the screen just because you have the space
+
+A component that works best at 600px wide should be 600px wide. Stretching it to fill a 1200px container doesn't improve it — it creates an uncomfortably wide reading area, excess whitespace with no purpose, and the visual sense that content is lost in the page.
+
+Give elements the width that optimizes their content, then constrain them with `max-width`. Let them shrink on smaller screens but don't force them to grow beyond their natural size. A centered, well-proportioned block on a wide screen reads better than a bloated full-width one.
+
+#### Fixed widths often beat fluid grid percentages
+
+Percentage-based fluid widths are appropriate when you want an element to scale continuously with the viewport. But many UI elements — sidebars, forms, cards, modals — have an optimal width that doesn't change with the screen size. Force these to a fixed or max-width rather than a percentage column. This prevents sidebars from growing uncomfortably wide on large screens and form fields from shrinking below usable width on medium screens.
+
+Only use fluid percentages where you actually want the element to scale with the container.
+
+#### Large and small elements don't scale at the same rate
+
+When adapting layouts across screen sizes, large elements should shrink faster than small elements. A 48px heading on desktop might need to be 28px on mobile — that's a 42% reduction. A 14px body text on desktop might need to be 13px or stay at 14px — minimal change. The ratio between them changes significantly, and that's correct. Don't try to maintain proportional relationships across breakpoints; adjust each element to what looks right at that size independently.
+
+#### Separation without borders
+
+Before reaching for a border to separate content, consider alternatives that often produce a cleaner result:
+
+- **Spacing alone**: increasing the gap between groups is frequently sufficient, and adds no visual weight
+- **Background color difference**: adjacent sections with subtly different surface colors read as distinct without any dividing line
+- **Typographic distinction**: a change in weight, size, or color between a heading and its content body creates natural separation
+
+Borders add visual noise. Use them when the separation needs to be explicit and unambiguous — data tables, form field inputs, comparative layouts where the boundary is part of the meaning. In most other cases, space and color handle it more gracefully.
+
+### Depth
