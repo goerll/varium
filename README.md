@@ -28,7 +28,6 @@ Notes:
 ## What’s inside
 
 - `skill/SKILL.md` - main skill entrypoint
-- `skill/topics/` - on-demand design guidance
 - `skill/assets/` - framework picker assets
 
 ## Flow
@@ -45,11 +44,6 @@ Notes:
 ```txt
 skill/
   SKILL.md
-  topics/
-    color.md
-    depth.md
-    spacing.md
-    typography.md
   assets/
     react/
     svelte/
